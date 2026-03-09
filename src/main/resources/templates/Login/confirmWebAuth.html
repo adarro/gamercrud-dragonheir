@@ -1,0 +1,98 @@
+{#include main.html }
+{#title}Complete registration{/title}
+{#moreScripts}
+<script src="/q/webauthn/webauthn.js" type="text/javascript" charset="UTF-8"></script>
+{/moreScripts}
+<div class="container">
+  <div class="item">
+    <h1>Status</h1>
+    <div id="result"></div>
+  </div>
+</div>
+
+
+{#form uri:Login.complete(newUser.confirmationCode)}
+
+<fieldset>
+  <legend>Complete registration for {newUser.email}</legend>
+  {#formElement name="login" label="Login" }
+  <button id="login">Login</button>
+  {/formElement}
+  {#formElement name="userName" label="User Name"}
+  {#input name="userName" value=newUser.username id="usernameRegister" placeholder="User name"/}
+  {/formElement}
+  {#if !newUser.authId}
+  {#formElement name="password" label="Password" class="input-group"}
+  {#input name="password" type="password" id="password"/}
+  <button class="btn btn-primary" type="button" id="register"><img src="/static/images/webauthn.svg" height="16px"
+                                                                   title="Use WebAuthn instead of a password"
+                                                                   alt="web auth button"/>
+    WebAuthn Login
+  </button>
+  {/formElement}
+  {#formElement name="password2" label="Password Confirmation"}
+  {#input name="password2" type="password" id="password2"/}
+  {/formElement}
+  {/if}
+  {#formElement name="firstName" label="First Name"}
+  {#input name="firstName" value=newUser.firstName id="firstName" placeholder="First name"/}
+  {/formElement}
+  {#formElement name="lastName" label="Last Name"}
+  {#input name="lastName" value=newUser.lastName id="lastName" placeholder="Last name"/}
+  {/formElement}
+  <!-- WebAuthn -->
+  {#input name="webAuthnId" type="hidden" id="webAuthnId"/}
+  {#input name="webAuthnRawId" type="hidden" id="webAuthnRawId"/}
+  {#input name="webAuthnResponseClientDataJSON" type="hidden" id="webAuthnResponseClientDataJSON"/}
+  {#input name="webAuthnResponseAttestationObject" type="hidden" id="webAuthnResponseAttestationObject"/}
+  {#input name="webAuthnType" type="hidden" id="webAuthnType"/}
+
+  <button type="submit" class="btn btn-primary">Complete registration</button>
+</fieldset>
+
+{/form}
+
+<script type="text/javascript">
+  const webAuthn = new WebAuthn();
+
+  const result = document.getElementById('result');
+
+  fetch('/api/public/me')
+    .then(response => response.text())
+    .then(username => result.append("User: "+username));
+
+  const loginButton = document.getElementById('login');
+
+  loginButton.addEventListener("click", (e) => {
+    result.replaceChildren();
+    webAuthn.login()
+      .then(x => fetch('/api/public/me'))
+      .then(response => response.text())
+      .then(username => {
+        result.append("User: "+username);
+      })
+      .catch(err => {
+        result.append("Login failed: "+err);
+      });
+    return false;
+  });
+
+  const registerButton = document.getElementById('register');
+
+  registerButton.addEventListener("click", (e) => {
+    var username = document.getElementById('usernameRegister').value;
+    var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+    result.replaceChildren();
+    webAuthn.register({ username: username, displayName: firstName + " " + lastName })
+      .then(body => {
+        result.append("User: "+username);
+      })
+      .catch(err => {
+        result.append("Registration failed: "+err);
+      });
+    return false;
+  });
+
+</script>
+{/include}
