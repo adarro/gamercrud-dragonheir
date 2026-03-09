@@ -1,8 +1,49 @@
-{! This is a comment: you can extend the main.html file like this, to give your templates a common style !}
-{#include main.html}
-{! This passes a title parameter to the main template !}
-{#title}Welcome{/title}
+{#include main.html }
+{#title}Todos{/title}
 
-<h1>Welcome to your Quarkus Renarde 🦊❤️ Application</h1> 
+<table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{m:todos.index.tasks}</th>
+      <th scope="col">{m:todos.index.action} <a href="{uri:Todos.pdf}" title="{m:todos.index.pdf}" class="float-end text-reset"><i class="bi bi-filetype-pdf"></i></a></th>
+    </tr>
+  </thead>
+  <tbody>
+    {#for todo in todos}
+    <tr {#if todo.done}class="table-secondary"{/if}>
+      <th scope="row">{todo.id}</th>
+      <td>
+        {#if todo.done}
+          <del>{todo.task}</del> (done {todo.doneDate.since})
+        {#else}
+          {todo.task}
+        {/if}
+      </td>
+      <td>
+      {#form uri:Todos.done(todo.id) class="inline"}
+        {#if todo.done}
+          <button type="submit" class="btn btn-warning" title="{m:todos.index.undone}"><i class="bi-arrow-counterclockwise"></i></button>
+        {#else}
+          <button type="submit" class="btn btn-success" title="{m:todos.index.done}"><i class="bi-check"></i></button>
+        {/if}
+      {/form}
+      {#form uri:Todos.delete(todo.id) class="inline"}
+        <button type="submit" class="btn btn-danger" title="{m:todos.index.delete}"><i class="bi-trash"></i></button>
+      {/form}
+      </td>
+    </tr>
+    {/for}
+    <tr>
+      <th scope="row">{m:todos.index.new}</th>
+      <td>
+      {#form uri:Todos.add()}
+        {#input name="task" placeholder=m:todos.index.placeholder autofocus=true/}
+      {/form}
+      </td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 
 {/include}

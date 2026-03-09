@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body>
+This is a welcome file
+<div class="container">
+<button id="myButton">Default</button>
+<button id="myButtonType" type="button">Button</button>
+<button id="myResetButton" type="reset">Reset</button>
+<button id="myImgButton" type="reset"><img src="/static/images/webauthn.svg" height="16px"
+                                           title="Use WebAuthn instead of a password" alt="web auth submit button"/>WebAuthn</button>
+</div>
+<script>
+    document.getElementById("myButton").addEventListener("click", function() {
+        alert("Default Button");
+    });
+    document.getElementById("myButtonType").addEventListener("click", function() {
+        alert("Button Type");
+    });
+    document.getElementById("myResetButton").addEventListener("click", function() {
+        alert("Reset Type");
+    });
+    document.getElementById("myImgButton").addEventListener("click", function() {
+        alert("img Type");
+    });
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@
   <button id="login">Login</button>
   {/formElement}
   {#formElement name="userName" label="User Name"}
-  {#input name="userName" value=newUser.username id="usernameRegister" placeholder="User name"/}
+  {#input name="userName" value=newUser.username id="username" placeholder="User name"/}
   {/formElement}
   {#if !newUser.authId}
   {#formElement name="password" label="Password" class="input-group"}
@@ -65,7 +65,17 @@
 
   loginButton.addEventListener("click", (e) => {
     result.replaceChildren();
-    webAuthn.login()
+    webAuthn.loginClientSteps({ username: username })
+      .then(body => {
+       // store the login JSON in form elements
+    document.getElementById('webAuthnId').value = body.id;
+    document.getElementById('webAuthnRawId').value = body.rawId;
+    document.getElementById('webAuthnResponseClientDataJSON').value = body.response.clientDataJSON;
+    document.getElementById('webAuthnResponseAuthenticatorData').value = body.response.authenticatorData;
+    document.getElementById('webAuthnResponseSignature').value = body.response.signature;
+    document.getElementById('webAuthnResponseUserHandle').value = body.response.userHandle;
+    document.getElementById('webAuthnType').value = body.type;
+    })
       .then(x => fetch('/api/public/me'))
       .then(response => response.text())
       .then(username => {
@@ -80,13 +90,20 @@
   const registerButton = document.getElementById('register');
 
   registerButton.addEventListener("click", (e) => {
-    var username = document.getElementById('usernameRegister').value;
+    var uName = document.getElementById('username').value;
     var firstName = document.getElementById('firstName').value;
     var lastName = document.getElementById('lastName').value;
     result.replaceChildren();
-    webAuthn.register({ username: username, displayName: firstName + " " + lastName })
+    webAuthn.registerClientSteps({ username: uName, displayName: firstName + " " + lastName })
       .then(body => {
-        result.append("User: "+username);
+        result.append("User: "+uName);
+        document.getElementById('webAuthnId').value = body.id;
+       document.getElementById('webAuthnRawId').value = body.rawId;
+       document.getElementById('webAuthnResponseAttestationObject').value = body.response.attestationObject;
+       document.getElementById('webAuthnResponseClientDataJSON').value = body.response.clientDataJSON;
+       document.getElementById('webAuthnType').value = body.type;
+       document.getElementById('password').disabled = true;
+       document.getElementById('password2').disabled = true;
       })
       .catch(err => {
         result.append("Registration failed: "+err);

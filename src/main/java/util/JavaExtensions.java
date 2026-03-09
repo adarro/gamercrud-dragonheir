@@ -1,26 +1,20 @@
 package util;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import io.quarkus.qute.TemplateExtension;
 
-/**
- * Add your custom Qute extension methods here.
- */
 @TemplateExtension
 public class JavaExtensions {
-    /**
-     * This registers the String.capitalise extension method
-     */
-    public static String capitalise(String string) {
-        StringBuilder sb = new StringBuilder();
-        for (String part : string.split("\\s+")) {
-            if(sb.length() > 0) {
-                sb.append(" ");
-            }
-            if(part.length() > 0) {
-            sb.append(part.substring(0, 1).toUpperCase());
-            sb.append(part.substring(1));
-            }
-        }
-        return sb.toString();
+
+    public static boolean isRecent(Date date){
+        Date now = new Date();
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.MONTH, -6);
+        Date sixMonthsAgo = cal.getTime();
+        return date.before(now) && date.after(sixMonthsAgo);
     }
+
 }

@@ -1,0 +1,22 @@
+{#include email.html }
+
+<p>
+  Welcome to Todos.
+</p>
+
+<p>
+  You received this email because someone (hopefully you) wants to register on Todos.
+</p>
+
+<p>
+  If you don't want to register, you can safely ignore this email.
+</p>
+
+<div>
+  If you want to register by either
+<ol>
+  <li><a href="{uriabs:Login.confirm(user.confirmationCode)}">creating a password</a>.</li>
+  <li><a href="{uriabs:Login.confirmWebAuth(user.confirmationCode)}">creating a passcode</a></li>
+</ol>
+</div>
+{/include}
