@@ -9,7 +9,6 @@ import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.security.Authenticated;
-import io.quarkus.security.webauthn.WebAuthnCredentialRecord;
 import io.quarkus.security.webauthn.WebAuthnLoginResponse;
 import io.quarkus.security.webauthn.WebAuthnRegisterResponse;
 import io.quarkus.security.webauthn.WebAuthnSecurity;
@@ -38,7 +37,7 @@ public class Login extends ControllerWithUser<User> {
 
   private static final Logger logger = Logger.getLogger(Login.class);
   @Inject
-  RenardeSecurity security;
+  RenardeSecurity renardeSecurity;
 
   @Inject
   WebAuthnSecurity webAuthnSecurity;
@@ -50,8 +49,6 @@ public class Login extends ControllerWithUser<User> {
     public static native TemplateInstance register(String email);
 
     public static native TemplateInstance confirm(User newUser);
-
-    public static native TemplateInstance confirmWebAuth(User newUser);
 
     public static native TemplateInstance logoutFirst();
 
@@ -114,7 +111,7 @@ public class Login extends ControllerWithUser<User> {
       // bump the auth counter
       user.webAuthnCredential.counter = authenticator.getCounter();
     }
-    NewCookie cookie = security.makeUserCookie(user);
+    NewCookie cookie = renardeSecurity.makeUserCookie(user);
     return Response.seeOther(Router.getURI(Application::index)).cookie(cookie).build();
   }
 
@@ -151,7 +148,7 @@ public class Login extends ControllerWithUser<User> {
   public TemplateInstance confirmWebAuth(@RestQuery String confirmationCode) {
     checkLogoutFirst();
     User newUser = checkConfirmationCode(confirmationCode);
-    return Templates.confirmWebAuth(newUser);
+    return Templates.confirm(newUser);
   }
 
   private void checkLogoutFirst() {
@@ -174,7 +171,7 @@ public class Login extends ControllerWithUser<User> {
       flash("messageType", "error");
       redirect(Application.class).index();
     }
-    User user = User.findForContirmation(confirmationCode);
+    User user = User.findForConfirmation(confirmationCode);
     if (user == null) {
       flash("message", "Invalid confirmation code");
       flash("messageType", "error");
@@ -234,7 +231,7 @@ public class Login extends ControllerWithUser<User> {
         creds.persist();
       }
     }
-    user.username = userName;
+    user.userName = userName;
     user.firstName = firstName;
     user.lastName = lastName;
     user.confirmationCode = null;
@@ -242,7 +239,7 @@ public class Login extends ControllerWithUser<User> {
 
     ResponseBuilder responseBuilder = Response.seeOther(Router.getURI(Login::welcome));
     if (!user.isOidc()) {
-      NewCookie cookie = security.makeUserCookie(user);
+      NewCookie cookie = renardeSecurity.makeUserCookie(user);
       responseBuilder.cookie(cookie);
     }
     return responseBuilder.build();

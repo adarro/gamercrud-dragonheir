@@ -17,7 +17,7 @@ public class Startup {
     adm.email = "admin@example.com";
     adm.firstName = "Michael";
     adm.lastName = "Hawk";
-    adm.username = "MiHawk";
+    adm.userName = "MiHawk";
     adm.password = BcryptUtil.bcryptHash("1q2w3e4r");
     adm.status = UserStatus.REGISTERED;
     adm.isAdmin = true;

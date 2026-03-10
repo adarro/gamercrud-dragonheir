@@ -1,8 +1,8 @@
 {#if it??}
 <!-- FIXME: there appears to be a size value coming from outer space -->
-<span class="user-link" title="{it.username}">
+<span class="user-link" title="{it.userName}">
 {#if img??}
 {#gravatar it.email size=size.or(20)/}
 {/if}
-{it.username}<i class="bi bi-{it.iconType}"></i></span>
+{it.userName}<i class="bi bi-{it.iconType}"></i></span>
 {/if}

@@ -43,14 +43,13 @@ public class WebAuthnCredential extends PanacheEntityBase {
     public WebAuthnCredentialRecord toWebAuthnCredentialRecord() {
         return WebAuthnCredentialRecord
                 .fromRequiredPersistedData(
-                        new RequiredPersistedData(user.username, credentialId,
+                        new RequiredPersistedData(user.userName, credentialId,
                                 aaguid, publicKey,
                                 publicKeyAlgorithm, counter));
     }
 
-    //TODO verify field name case-sensitivity user.username vs user.userName if lookup fails
     public static List<WebAuthnCredential> findByUsername(String username) {
-        return list("user.username", username);
+        return list("user.userName", username);
     }
 
     public static WebAuthnCredential findByCredentialId(String credentialId) {

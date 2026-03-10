@@ -20,7 +20,7 @@ public class User extends PanacheEntity implements RenardeUser {
   @Column(nullable = false)
   public String email;
   @Column(unique = true)
-  public String username;
+  public String userName;
   public String password;
   // non-owning side, so we can add more credentials later
   @OneToOne(mappedBy = "user")
@@ -55,7 +55,7 @@ public class User extends PanacheEntity implements RenardeUser {
 
   @Override
   public String userId() {
-    return username;
+    return userName;
   }
 
   public boolean isOidc() {
@@ -82,19 +82,18 @@ public class User extends PanacheEntity implements RenardeUser {
   }
 
   public static User findRegisteredByUserName(String username) {
-    return find("LOWER(username) = ?1 AND status = ?2", username.toLowerCase(), UserStatus.REGISTERED).firstResult();
+    return find("LOWER(userName) = ?1 AND status = ?2", username.toLowerCase(), UserStatus.REGISTERED).firstResult();
   }
 
   public static User findByUserName(String username) {
-    return find("LOWER(username) = ?1", username.toLowerCase()).firstResult();
+    return find("LOWER(userName) = ?1", username.toLowerCase()).firstResult();
   }
 
   public static User findByAuthId(String tenantId, String authId) {
     return find("tenantId = ?1 AND authId = ?2", tenantId, authId).firstResult();
   }
 
-  // TODO: Fix typo in name
-  public static User findForContirmation(String confirmationCode) {
+  public static User findForConfirmation(String confirmationCode) {
     return find("confirmationCode = ?1 AND status = ?2", confirmationCode, UserStatus.CONFIRMATION_REQUIRED).firstResult();
   }
 }

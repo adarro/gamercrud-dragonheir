@@ -59,7 +59,7 @@ public class MyOidcSetup implements RenardeUserProvider, RenardeOidcHandler {
                 user.email = "twitter@example.com";
             user.firstName = oidcSecurity.getOidcFirstName();
             user.lastName = oidcSecurity.getOidcLastName();
-            user.username = oidcSecurity.getOidcUserName();
+            user.userName = oidcSecurity.getOidcUserName();
 
             user.status = UserStatus.CONFIRMATION_REQUIRED;
             user.confirmationCode = UUID.randomUUID().toString();
