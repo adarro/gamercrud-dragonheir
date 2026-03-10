@@ -9,7 +9,6 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 This is a simple Data centered template designed to be used to quickly get you up and running
 in a data based site.
 
-
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
@@ -18,7 +17,7 @@ You can run your application in dev mode that enables live coding using:
 ./gradlew quarkusDev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> **_NOTE:_** Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
 
 ## Packaging and running the application
 
@@ -73,5 +72,4 @@ This is a small Renarde webapp. Once the quarkus app is started visit http://loc
 
 ## Acknowlegements
 
-The general scaffolding is implemented using the [Quarkus Renarde TODO demo app](https://github.com/FroMage/quarkus-renarde-todo) for out of the box OIDC login, CRUD Database entities and basic front end web site.  The original TODO app may be removed in the near future.
-
+The general scaffolding is implemented using the [Quarkus Renarde TODO demo app](https://github.com/FroMage/quarkus-renarde-todo) for out of the box OIDC login, CRUD Database entities and basic front end web site. The original TODO app may be removed in the near future.

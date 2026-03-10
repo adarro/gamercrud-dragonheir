@@ -3,7 +3,7 @@
 ## Quarkus
 
 This project uses the Quarkus technology stack as a basic Microservice.
-This *should* allow it to be used / deployed via Docker, any JVM or potentially a native build.
+This _should_ allow it to be used / deployed via Docker, any JVM or potentially a native build.
 
 ## Build Tooling
 
@@ -19,5 +19,4 @@ Default build tool.
 
 ### Qute
 
-[Qute](https://quarkus.io/guides/qute) is a template language used by [Renarde](#renarde) to render HTML with Java backed operations. 
-
+[Qute](https://quarkus.io/guides/qute) is a template language used by [Renarde](#renarde) to render HTML with Java backed operations.
